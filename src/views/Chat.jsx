@@ -24,12 +24,30 @@ function fallbackOpener(vibe, name) {
   return openers[vibe] || openers.gentle;
 }
 
+// Used only if the model is unreachable after retries. Shuffled and stepped
+// through so repeated outages still feel varied rather than looping.
 const FALLBACK_REPLIES = [
   "That sounds like a lot to carry. What part of it weighs on you the most?",
   "I hear you. When did you first start feeling this way?",
   "Thank you for trusting me with that. What do you wish someone understood right now?",
   "That makes sense. What's underneath that feeling for you?",
+  "I'm still here with you. What's the thought that keeps circling back?",
+  "That's real, and it matters. What would feel like a small relief right now?",
+  "It sounds heavier than you let people see. Who do you wish you could say this to?",
+  "Take your time. What's the part you haven't said out loud yet?",
+  "I'm listening. When it's loudest, what does that feeling tell you?",
+  "You don't have to hold all of it alone. What's sitting closest to the surface tonight?",
 ];
+
+// Fisher-Yates shuffle so the fallback order differs each session.
+function shuffled(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 const SAFE_SUMMARY = {
   tags: ['brave', 'honest', 'open'],
@@ -55,7 +73,8 @@ export default function Chat({ companionName, vibe, sessionCount, onEnd }) {
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const [ending, setEnding] = useState(false);
-  const fallbackIdx = useRef(0);
+  const fallbackDeck = useRef(shuffled(FALLBACK_REPLIES));
+  const fallbackPos = useRef(0);
   const scrollRef = useRef(null);
 
   const isPaywalled = sessionCount > FREE_LIMIT;
@@ -116,8 +135,9 @@ export default function Chat({ companionName, vibe, sessionCount, onEnd }) {
       const reply = await callAI(history);
       setMessages((m) => [...m, { role: 'assistant', text: reply, time: timeNow() }]);
     } catch {
-      const fb = FALLBACK_REPLIES[fallbackIdx.current % FALLBACK_REPLIES.length];
-      fallbackIdx.current += 1;
+      const deck = fallbackDeck.current;
+      const fb = deck[fallbackPos.current % deck.length];
+      fallbackPos.current += 1;
       setMessages((m) => [...m, { role: 'assistant', text: fb, time: timeNow() }]);
     } finally {
       setTyping(false);
