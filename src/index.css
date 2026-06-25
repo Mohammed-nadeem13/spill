@@ -353,3 +353,23 @@ a { color: var(--primary-deep); text-decoration: none; }
 @media (min-width: 768px) and (max-width: 1023px) {
   .feature-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ============================================================
+   Safety disclaimer (chat screen + footer)
+   ============================================================ */
+.chat-disclaimer {
+  padding: 5px 16px 9px; font-size: 11px; line-height: 15px;
+  text-align: center; color: var(--mute);
+}
+.chat-disclaimer a { color: var(--mute); text-decoration: underline; text-underline-offset: 2px; }
+.chat-disclaimer a:hover { color: var(--primary-soft); }
+
+.footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.footer-disclaimer { max-width: 460px; text-align: right; line-height: 18px; }
+.footer-right a { color: var(--mute); text-decoration: underline; text-underline-offset: 2px; }
+.footer-right a:hover { color: var(--primary-soft); }
+
+@media (max-width: 767px) {
+  .footer-right { align-items: flex-start; }
+  .footer-disclaimer { text-align: left; }
+}

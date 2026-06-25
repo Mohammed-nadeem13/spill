@@ -1,3 +1,5 @@
+import { ICALL_HELPLINE, SAFETY_DISCLAIMER } from '../constants.js';
+
 // Lightning bolt glyph — the brand mark, rendered in electric green.
 function Bolt({ size = 18 }) {
   return (
@@ -131,7 +133,13 @@ export default function Landing({ onEnter }) {
       {/* Footer */}
       <footer className="footer">
         <div className="brand"><Bolt size={16} /> spill</div>
-        <div className="caption">Your private space to just… let it out. · iCall helpline 9152987821</div>
+        <div className="footer-right">
+          <div className="caption">
+            Your private space to just… let it out.&ensp;·&ensp;
+            <a href={`tel:${ICALL_HELPLINE}`}>iCall&nbsp;{ICALL_HELPLINE}</a>
+          </div>
+          <div className="caption footer-disclaimer">{SAFETY_DISCLAIMER}</div>
+        </div>
       </footer>
     </div>
   );

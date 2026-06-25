@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { ICALL_HELPLINE } from '../constants.js';
 
 const FREE_LIMIT = 5;
 
 // ---- Vibe system prompts (the {companionName} is interpolated) ----
 function systemPrompt(vibe, name) {
   const prompts = {
-    gentle: `You are ${name}, a warm gentle AI companion inside Spill — a private app for Indian college students to process emotions they cannot share with anyone. You are like a trusted caring friend. Always reply in 1-3 short sentences. Ask ONE empathetic follow-up question per response digging into their emotion not the facts. Never give unsolicited advice or solutions. Never use clinical language. If genuine crisis signals appear, gently mention iCall helpline 9152987821. Your first message: greet them warmly and ask how they are really feeling right now.`,
+    gentle: `You are ${name}, a warm gentle AI companion inside Spill — a private app for Indian college students to process emotions they cannot share with anyone. You are like a trusted caring friend. Always reply in 1-3 short sentences. Ask ONE empathetic follow-up question per response digging into their emotion not the facts. Never give unsolicited advice or solutions. Never use clinical language. If genuine crisis signals appear, gently mention iCall helpline ${ICALL_HELPLINE}. Your first message: greet them warmly and ask how they are really feeling right now.`,
     direct: `You are ${name}, a direct honest AI companion inside Spill. Like a straight-talking best friend who actually listens. Reply in 1-3 short sentences. Ask ONE sharp follow-up question cutting to what matters. No advice unless asked. No clinical language. First message: direct warm greeting, ask what is going on right now.`,
     witty: `You are ${name}, a warm witty AI companion inside Spill. Light, fun, genuinely caring. Reply in 1-3 short sentences. One playful follow-up question per response. No advice unless asked. No clinical language. Touch of humour, never at user's expense. First message: warm fun greeting, ask how they are doing honestly.`,
   };
@@ -259,6 +260,12 @@ export default function Chat({ companionName, vibe, sessionCount, onEnd }) {
             <polyline points="6 11 12 5 18 11" />
           </svg>
         </button>
+      </div>
+
+      {/* Persistent safety disclaimer */}
+      <div className="chat-disclaimer">
+        Spill is a supportive space — not a substitute for professional care.{' '}
+        <a href={`tel:${ICALL_HELPLINE}`}>iCall&nbsp;{ICALL_HELPLINE}</a>
       </div>
 
       {/* Freemium paywall after the free limit */}
